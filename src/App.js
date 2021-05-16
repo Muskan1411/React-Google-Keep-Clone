@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Header from './Components/Header';
+import NoteCreator from './Components/NoteCreator';
+import NoteCard from './Components/NoteCard';
+import Footer from './Components/Footer';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+const App = () => {
+  const [ noteArr, setNoteArr ] = useState([]);
+
+  const handleAddNote = (note) => {
+    setNoteArr((prevArr)=> {
+      return [
+        ...prevArr,
+        note
+      ]
+    })
+  }
+
+  const handleRemoveNote = (id) => {
+    setNoteArr(()=> {
+      return noteArr.filter((note, index) => {
+        return id !== index
+      })
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Header />
+      <NoteCreator onAddNote={handleAddNote}/>
+      {noteArr.map((note, index) => 
+        { 
+          return (
+            <NoteCard 
+             key={index} 
+             id={index}
+             note={note} 
+             onRemoveNote={handleRemoveNote}
+            />
+          )
+          
+        }
+      )}
+      <Footer />
+    </>
+  )
 }
 
 export default App;
